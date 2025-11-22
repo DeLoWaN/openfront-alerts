@@ -60,8 +60,9 @@
             audio.currentTime = 0;
         }
 
-        // Update URL if changed
-        if (audio.src !== url) {
+        // Update URL if changed (normalize both to absolute URLs for comparison)
+        const resolvedUrl = new URL(url, window.location.href).href;
+        if (audio.src !== resolvedUrl) {
             audio.src = url;
         }
 
@@ -459,7 +460,16 @@
         console.log('[AudioAlerts] Initializing hooks...');
 
         // Hook AlertFrame.prototype.tick
+        const maxAttempts = 60;
+        let attempts = 0;
         const waitForAlertFrame = setInterval(() => {
+            attempts++;
+            if (attempts >= maxAttempts) {
+                clearInterval(waitForAlertFrame);
+                console.warn('[AudioAlerts] Failed to hook AlertFrame.prototype.tick after', maxAttempts, 'attempts');
+                return;
+            }
+            
             const alertFrame = customElements.get('alert-frame');
             if (alertFrame && alertFrame.prototype && alertFrame.prototype.tick) {
                 clearInterval(waitForAlertFrame);

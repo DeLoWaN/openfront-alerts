@@ -445,8 +445,8 @@
         };
         
         btn.onclick = () => {
-            const overlay = document.getElementById('ofio-audio-overlay');
             const modal = document.getElementById('ofio-audio-settings-modal') || createSettingsModal();
+            const overlay = document.getElementById('ofio-audio-overlay');
             if (overlay) overlay.style.display = 'block';
             modal.style.display = 'block';
         };
@@ -517,24 +517,26 @@
 
                         // 2. Special Alerts (Nuke, Hydrogen, Boarding)
                         // GameUpdateType.UnitIncoming = 14
-                        const updates = this.game.updatesSinceLastTick();
-                        if (updates && updates[14]) {
-                            for (const event of updates[14]) {
-                                // Filter out events not meant for us
-                                if (event.playerID !== myPlayer.smallID()) {
-                                    continue;
-                                }
+                        if (myPlayer && myPlayer.isAlive()) {
+                            const updates = this.game.updatesSinceLastTick();
+                            if (updates && updates[14]) {
+                                for (const event of updates[14]) {
+                                    // Filter out events not meant for us
+                                    if (event.playerID !== myPlayer.smallID()) {
+                                        continue;
+                                    }
 
-                                // MessageTypes: NUKE_INBOUND=5, HYDROGEN_BOMB_INBOUND=6, NAVAL_INVASION_INBOUND=7
-                                if (event.messageType === 5) {
-                                    console.log('[AudioAlerts] Nuke detected!');
-                                    playSound('nuke');
-                                } else if (event.messageType === 6) {
-                                    console.log('[AudioAlerts] Hydrogen Bomb detected!');
-                                    playSound('hydrogen');
-                                } else if (event.messageType === 7) {
-                                    console.log('[AudioAlerts] Naval Invasion detected!');
-                                    playSound('boarding');
+                                    // MessageTypes: NUKE_INBOUND=5, HYDROGEN_BOMB_INBOUND=6, NAVAL_INVASION_INBOUND=7
+                                    if (event.messageType === 5) {
+                                        console.log('[AudioAlerts] Nuke detected!');
+                                        playSound('nuke');
+                                    } else if (event.messageType === 6) {
+                                        console.log('[AudioAlerts] Hydrogen Bomb detected!');
+                                        playSound('hydrogen');
+                                    } else if (event.messageType === 7) {
+                                        console.log('[AudioAlerts] Naval Invasion detected!');
+                                        playSound('boarding');
+                                    }
                                 }
                             }
                         }

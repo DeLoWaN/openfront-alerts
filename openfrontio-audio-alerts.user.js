@@ -5,7 +5,6 @@
 // @description  Play configurable sounds for OpenFrontIO alerts (Attack, Nuke, Hydrogen, Boarding)
 // @author       You
 // @match        https://openfront.io/*
-// @match        http://localhost:8080/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openfront.io
 // @grant        none
 // ==/UserScript==
